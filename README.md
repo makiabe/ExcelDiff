@@ -8,7 +8,7 @@ Settings → Pages → Build and deploymentで、Sourceを **Deploy from a branc
 
 公開先: https://makiabe.github.io/ExcelDiff/
 
-ビルド不要です。ルートの `index.html` と `app.js`、`file-codec.js`、`diff-engine.js`、`assets` が必要です。
+ビルド不要です。ルートの `index.html` と `app.js`、`file-codec.js`、`diff-engine.js`、`assets` が必要です。`.nojekyll` を含めて公開してください。
 
 ## 比較機能
 
@@ -35,4 +35,4 @@ XLSX/CSVは外部ライブラリなしで処理します。XLSのみ互換ライ
 
 ## 素材
 
-添付モックの猫イラストを使用しています。公開用にWebPへ最適化します。
+添付モックの猫イラストを使用し、公開用にWebPへ最適化しています。画像2点はSHA-256による整合性チェックを通して反映しました。画像転送用の一時ワークフローは転送完了後に削除しています。
