@@ -38,7 +38,6 @@
   $('#clearFiles').addEventListener('click',()=>{state.files=[null,null];state.status=['未選択','未選択'];invalidate('選択をクリアしました。');renderFiles();});
   for(const id of ['ignoreWhitespace','ignoreCase','compareFormulas','compareStyles','compareTypes','excludeColumns','primaryKey'])$('#'+id).addEventListener('input',()=>invalidate('比較設定を変更しました。もう一度「比較する」を押してください。'));
   $$('input[name="view"]').forEach(n=>n.addEventListener('change',()=>{state.page=0;if(state.result)renderTable();}));
-  $$('button[aria-label="ダークモード"]').forEach(b=>b.addEventListener('click',()=>document.documentElement.classList.toggle('dark-mode')));
   el.compare.addEventListener('click',compare);
   async function compare(){
     if(state.loading||!state.files.every(Boolean))return;
