@@ -1,0 +1,30 @@
+name: Verify site
+on:
+  push:
+    branches: [main, feat/english-i18n]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: |
+          node --check app.js
+          node --check diff-engine.js
+          node --check file-codec.js
+      - name: Build localized pages when configured
+        run: |
+          if [ -f scripts/build.mjs ]; then node scripts/build.mjs; fi
+          if [ -f tests/i18n.test.mjs ]; then node --test tests/i18n.test.mjs; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: excel-diff-site
+          path: |
+            .
+            !.git
+          include-hidden-files: true
+          retention-days: 7
