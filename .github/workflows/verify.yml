@@ -11,20 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check JavaScript syntax
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate generated localized pages
         run: |
-          node --check app.js
-          node --check diff-engine.js
-          node --check file-codec.js
-      - name: Build localized pages when configured
-        run: |
-          if [ -f scripts/build.mjs ]; then node scripts/build.mjs; fi
-          if [ -f tests/i18n.test.mjs ]; then node --test tests/i18n.test.mjs; fi
+          if [ -f .publication/migrate.mjs ]; then
+            echo 'The Prepare English release workflow will build and validate this one-time migration.'
+          else
+            npm run build
+            npm run check
+            git diff --exit-code -- index.html en locales sitemap.xml .nojekyll
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: excel-diff-site
           path: |
             .
             !.git
+            !node_modules
+            !.publication
           include-hidden-files: true
           retention-days: 7

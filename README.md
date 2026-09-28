@@ -1,38 +1,50 @@
-# Excel Diff v1.1.0
+# Excel Diff
 
-Excel / CSVを2つ選ぶだけで差分を比較できる、ブラウザ完結の無料ツールです。
+Excel / CSV files are compared locally in the browser. No file uploads, accounts or usage limits.
 
-## GitHub Pagesで公開
+- Japanese: https://makiabe.github.io/ExcelDiff/
+- English: https://makiabe.github.io/ExcelDiff/en/
 
-Settings → Pages → Build and deploymentで、Sourceを **Deploy from a branch**、Branchを **main**、フォルダーを **/(root)** に設定し、Saveしてください。
+## 多言語対応 / Localization
 
-公開先: https://makiabe.github.io/ExcelDiff/
+`src/index.template.html` is the shared HTML template. `locales/ja.json` and `locales/en.json` contain visible page text, accessibility labels, comparison messages, errors and exported report text. The comparison code is shared by every language; uploaded spreadsheet contents are never translated or modified.
 
-ビルド不要です。ルートの `index.html` と `app.js`、`file-codec.js`、`diff-engine.js`、`assets` が必要です。`.nojekyll` を含めて公開してください。
+The generated `index.html`, `en/index.html`, `locales/*.js` and `sitemap.xml` are committed so the site works with ordinary GitHub Pages branch publishing. Do not edit generated files directly.
 
-## 比較機能
+### Add another language
 
-- A・比較元、B・比較先のファイル名・サイズ・読み込み状態を表示。
-- XLSXの保存値・データ型・数式・標準セル書式を比較。先頭行も比較します。
-- 主キー指定による行追加・削除の検出。重複キーや空キーはエラーとして表示します。
-- 空白・大文字小文字の無視、列の除外、複合主キー、表示の切り替え。
-- 差分Excel、HTML、PDF（ブラウザの印刷機能）レポート。
-- ファイル・比較条件の変更時に古い結果を破棄。読み込み失敗を差分0件として表示しません。
+1. Copy `locales/en.json` to a new file such as `locales/es.json`. Translate its values, preserving keys, HTML tags and placeholders such as `{p0}` and `{locale}`. Do not translate or remove CSS embedded in the report template.
+2. Add a registry entry in `site.config.json`, for example:
 
-## 処理範囲と制限
+```json
+{"code":"es","label":"Español","path":"es/","dir":"ltr","artwork":"international"}
+```
 
-主キー未指定時は同じセル位置で比較します。途中に行が追加・削除された表は、重複しないID列を指定してください。列名は1行目から取得します。
+3. Run `npm run build` and `npm run check` using Node.js 20 or later. No package installation is required for these commands.
+4. Review desktop and mobile layouts, then commit the dictionary, configuration and generated files together.
 
-数式は保存された内容を比較し、再計算しません。条件付き書式の表示結果、画像・図形、コメント、リンク先、印刷設定、テーブルスタイル、マクロは比較対象外です。旧形式XLSの書式比較は表示形式のみです。
+The builder automatically creates the language-specific URL, language switcher links, canonical URL, reciprocal hreflang links, structured data and sitemap entries. It rejects missing translations, mismatched interpolation placeholders and duplicate locale paths. Do not publish a language before its translation has been reviewed.
 
-安全上の上限は50MB/ファイル、50万セル/ファイル、比較200万セル組/シートです。上限超過時は省略せずエラーを表示します。
+All non-Japanese languages share the supplied text-free mascot artwork. Speech-bubble text is real HTML positioned with `site.css`; it is not baked into the images. Japanese artwork remains unchanged.
 
-XLSX/CSVは外部ライブラリなしで処理します。XLSのみ互換ライブラリをCDNから取得します。選択したファイルをサーバーにアップロードしません。
+The dictionaries are trusted application resources. Values used for reports contain HTML, so translations should be reviewed as application code. Spreadsheet strings continue to be escaped by the comparison UI.
 
-## 確認済みテスト
+## Development
 
-提供したv1.1.0 ZIPをローカルChromiumで検証し、比較処理42項目、画面操作・入出力23項目が成功しています。実利用するファイルでの受入確認は別途必要です。
+```sh
+npm run build
+npm run check
+python -m http.server 8000
+```
 
-## 素材
+Open the Japanese root page or `/en/`. Tests cover translation completeness, static SEO output, reciprocal links, CSV comparison, ignored changes, header comparison, duplicate-key errors, interpolation and adding a third locale.
 
-添付モックの猫イラストを使用し、公開用にWebPへ最適化しています。画像2点はSHA-256による整合性チェックを通して反映しました。画像転送用の一時ワークフローは転送完了後に削除しています。
+## Supported scope
+
+XLSX values, types, formulas, standard cell formatting, merged cells, dimensions and sheet metadata are compared. Formulas are not recalculated. CSV values remain strings so leading zeros are preserved. Legacy XLS uses a compatibility library downloaded only when needed, without transmitting the selected file; its formatting comparison is limited to number formats.
+
+Limits: 50 MB and 500,000 cells per file, and 2 million compared cell pairs per sheet. Unsupported features and safety limits are reported rather than silently dropping data.
+
+## Search indexing
+
+The language pages contain their headings, instructions and FAQ directly in HTML, without requiring JavaScript to display that content. The sitemap is `https://makiabe.github.io/ExcelDiff/sitemap.xml`. Search Console submission and search-engine indexing are separate from deployment; no indexing or ranking is guaranteed.
