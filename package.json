@@ -1,7 +1,7 @@
 {
   "name": "excel-diff",
   "private": true,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Private, browser-based Excel and CSV comparison with static localized pages",
   "scripts": {
     "build": "node scripts/build.mjs",
