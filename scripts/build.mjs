@@ -29,7 +29,7 @@ for(const locale of config.locales){
  }
  const base=locale.path?'../':'',url=new URL(locale.path,config.siteUrl).href;
  const intl=locale.artwork!=='ja';
- const vars={...messages,lang:locale.code,dir:locale.dir,base,
+ const vars={...messages,lang:locale.code,dir:locale.dir,base,'site.version':config.version,
   'asset.hero':base+'assets/'+(intl?'hero-cat-intl.avif':'hero-cat.webp'),
   'asset.bottom':base+'assets/'+(intl?'bottom-cat-intl.avif':'bottom-cat.webp'),
   'asset.heroWidth':'640','asset.heroHeight':'320',

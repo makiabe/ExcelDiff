@@ -7,9 +7,10 @@ html:not([lang=ja]) .hero-section{display:grid!important;grid-template-columns:m
 @media print{.locale-switcher,.mascot{display:none!important}}
 
 /* Text callouts for international artwork; Japanese artwork already contains its own labels. */
-.hero-mascot .hero-labels{position:absolute;top:12%;right:3%;display:grid;gap:clamp(5px,1.2cqw,10px);width:min(37%,220px);margin:0;padding:0;list-style:none;pointer-events:none}
-.hero-mascot .hero-labels li{display:flex;align-items:center;min-height:clamp(27px,5.2cqw,40px);padding:clamp(5px,1.1cqw,9px) clamp(7px,1.5cqw,12px);border:1px solid rgba(21,147,90,.2);border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 3px 12px rgba(30,80,50,.09);color:#176f45;font-size:clamp(8px,1.8cqw,13px);font-weight:800;line-height:1.25}
+html:not([lang=ja]) .hero-mascot{padding-bottom:44px}
+.hero-mascot .hero-labels{position:absolute;right:2%;bottom:3px;left:2%;display:flex;justify-content:center;gap:8px;width:auto;margin:0;padding:0;list-style:none;pointer-events:none}
+.hero-mascot .hero-labels li{display:flex;flex:1 1 0;align-items:center;justify-content:center;min-height:34px;padding:6px 8px;border:1px solid rgba(21,147,90,.2);border-radius:999px;background:rgba(255,255,255,.96);box-shadow:0 3px 12px rgba(30,80,50,.09);color:#176f45;font-size:clamp(9px,1.8cqw,13px);font-weight:800;line-height:1.25;text-align:center}
 .hero-mascot .hero-labels li::before{content:"";width:7px;height:7px;flex:none;margin-right:7px;border-radius:50%;background:#15935a}
 .hero-mascot .hero-labels li:nth-child(2)::before{background:#5a6ee0}
 .hero-mascot .hero-labels li:nth-child(3)::before{background:#e5a641}
-@media(max-width:760px){.hero-mascot .hero-labels{top:7%;right:1%;width:min(43%,220px);gap:5px}.hero-mascot .hero-labels li{min-height:27px;font-size:clamp(8px,2.1cqw,12px)}}
+@media(max-width:760px){html:not([lang=ja]) .hero-mascot{padding-bottom:42px}.hero-mascot .hero-labels{right:0;left:0;gap:5px}.hero-mascot .hero-labels li{min-height:34px;padding:5px;font-size:clamp(8px,2.1cqw,12px)}}
