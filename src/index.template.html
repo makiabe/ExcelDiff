@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Excel Diff - Excel / CSV 差分比較ツール【無料・アップロード不要】</title><meta content="2つのExcel・CSVファイルをブラウザ内で比較。セル・数式・書式・行の差分を検出し、Excel・HTML・PDFレポートに出力。無料、登録・アップロード不要。" name="description"/><link href="favicon.ico?v=frog-cat-1" rel="icon" sizes="16x16 32x32" type="image/x-icon"/><style>
+<html dir="{{dir}}" lang="{{lang}}"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>{{seo.title}}</title><meta content="{{seo.description}}" name="description"/><link href="{{base}}favicon.ico?v=frog-cat-1" rel="icon" sizes="16x16 32x32" type="image/x-icon"/><style>
 :root{--green:#15935a;--ink:#1c2b23;--muted:#6c7671;--line:#e3e9e5}
 html{scroll-behavior:smooth}body{margin:0;font-family:"Noto Sans JP",system-ui,sans-serif;color:var(--ink);background:#f4faf6}*{box-sizing:border-box}
 button,input{font:inherit}.file-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:720px;margin:14px auto 0}.file-slot{min-width:0;border:1px solid #d8e8de;background:#fff;border-radius:9px;padding:10px 12px;text-align:left;transition:.15s}.file-slot.selected{border-color:#8fcfab;background:#eef9f2}.file-slot-label{display:block;font-size:11px;font-weight:900;color:#718078;margin-bottom:3px}.file-slot.selected .file-slot-label{color:#177742}.file-slot-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:800;color:#26342d}.file-slot.empty .file-slot-name{color:#9aa59f;font-weight:600}.file-slot-meta{display:block;margin-top:2px;font-size:10.5px;color:#849189}@media(max-width:640px){.file-chips{grid-template-columns:1fr}}.message{min-height:20px;font-size:13px;color:#b0502a;text-align:center}.message.ok{color:#137a42}.drop-active{background:#e3f4e9!important;border-color:#15935a!important}.results-card,.info-card{margin-top:14px;background:rgba(255,255,255,.95);border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(30,80,50,.05)}.results-head{display:flex;gap:20px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap}.results-head h2,.info-card h2{margin:4px 0 6px;font-size:24px}.eyebrow{font-size:12px;font-weight:800;color:#15935a;background:#e2f3e7;border-radius:999px;padding:5px 10px}.results-head p{margin:0;color:#6c7671;font-size:13px}.export-actions{display:flex;gap:8px;flex-wrap:wrap}.export-actions button{border:1px solid #cfe1d6;background:#fff;color:#176f45;border-radius:8px;padding:9px 13px;font-weight:700;cursor:pointer}.export-actions button:hover{background:#f0f8f3}.sheet-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0 10px}.sheet-tab{border:1px solid #dce7e0;background:#fff;border-radius:999px;padding:7px 12px;font-size:12px;cursor:pointer}.sheet-tab.active{background:#15935a;color:#fff;border-color:#15935a}.table-wrap{overflow:auto;border:1px solid #e3e9e5;border-radius:10px;max-height:620px}.diff-table{width:100%;border-collapse:collapse;font-size:12px;min-width:760px}.diff-table th{position:sticky;top:0;background:#f4f8f5;z-index:2;text-align:left;padding:9px;border-bottom:1px solid #dde5df;white-space:nowrap}.diff-table td{padding:8px 9px;border-bottom:1px solid #eef2ef;vertical-align:top}.diff-table tr.added{background:#ecf8ef}.diff-table tr.deleted{background:#fff0f0}.diff-table tr.changed{background:#fff9e9}.diff-cell{outline:2px solid rgba(224,143,38,.35);outline-offset:-2px}.status-badge{display:inline-block;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800}.status-added{background:#dcf2e3;color:#177742}.status-deleted{background:#fde1e1;color:#b63a3a}.status-changed{background:#fff0c8;color:#9b6813}.status-same{background:#edf0ee;color:#64706a}.cell-old{color:#9d4040;text-decoration:line-through}.cell-new{color:#147847;font-weight:700}.cell-meta{color:#7b8580;font-size:10px;margin-top:2px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.steps>div{display:flex;gap:10px;align-items:center;padding:13px;border:1px solid #e3e9e5;border-radius:9px}.steps b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e2f3e7;color:#177742}.info-card details{border-top:1px solid #edf1ee;padding:12px 0}.info-card summary{font-weight:700;cursor:pointer}.info-card p{color:#5f6b65;line-height:1.7}
@@ -8,9 +8,7 @@ button,input{font:inherit}.file-chips{display:grid;grid-template-columns:repeat(
 
 .file-slot-name{white-space:normal;overflow-wrap:anywhere;font-size:14px}.file-slot-meta{font-size:12px;color:#52725e}.slot-actions{display:flex;gap:8px;margin-top:8px}.slot-actions button,.file-tools button,.pagination button{border:1px solid #c7ddce;background:#fff;color:#176f45;border-radius:6px;padding:5px 10px;font-size:12px;cursor:pointer}.file-tools{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}.file-slot{cursor:default}.file-slot-label{font-size:12px}.message{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;padding:5px 8px}.message.error{color:#a52828;background:#fff0f0;border-radius:6px}.message.notice{color:#8a6511;background:#fff8e5;border-radius:6px}button:disabled{opacity:.48;cursor:not-allowed!important}.compare-note,.scope-note{font-size:12px;color:#596d60;line-height:1.8;margin:12px 4px}.scope-note summary{cursor:pointer}.diagnostics{background:#f3f8f5;border-radius:8px;padding:10px 14px;margin-top:14px;font-size:12px;line-height:1.7}.diagnostics p{margin:4px 0}.result-warnings{background:#fff8e5;color:#705210;padding:12px 16px;margin-top:12px;border-radius:8px;font-size:12px}.result-warnings p{margin:5px 0}.diff-table td{white-space:pre-wrap;min-width:95px;max-width:420px;overflow-wrap:anywhere}.diff-table th{min-width:80px}.diff-table.cells-only tr.changed{background:white}.diff-cell{background:#fff1cd}.empty-result{padding:24px;text-align:center;color:#5f7167}.structural-diffs{padding:12px 16px;background:#f8f4e8;font-size:12px}.structural-diffs details,.style-detail{margin-top:7px}.style-detail summary{font-size:11px;cursor:pointer}.structural-diffs pre,.style-detail pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:600px;max-height:200px;overflow:auto;font-size:10px}.pagination{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:12px;color:#5a7062}.results-card{scroll-margin-top:75px}#resultSummary{overflow-wrap:anywhere;line-height:1.8}#appVersion{padding:3px 8px;border-radius:6px;background:#e3f3e8;color:#176f45;font-weight:700}
 @media(max-width:760px){main>section:first-child>div:first-child{padding-left:0!important}main>section:first-child>div:last-child{margin:0!important}header>div{justify-content:space-between}.file-slot-name{font-size:13px}}
-</style><link rel="canonical" href="https://makiabe.github.io/ExcelDiff/"><link rel="alternate" hreflang="ja" href="https://makiabe.github.io/ExcelDiff/">
-<link rel="alternate" hreflang="en" href="https://makiabe.github.io/ExcelDiff/en/">
-<link rel="alternate" hreflang="x-default" href="https://makiabe.github.io/ExcelDiff/en/"><meta property="og:type" content="website"><meta property="og:site_name" content="Excel Diff"><meta property="og:title" content="Excel Diff - Excel / CSV 差分比較ツール【無料・アップロード不要】"><meta property="og:description" content="2つのExcel・CSVファイルをブラウザ内で比較。セル・数式・書式・行の差分を検出し、Excel・HTML・PDFレポートに出力。無料、登録・アップロード不要。"><meta property="og:url" content="https://makiabe.github.io/ExcelDiff/"><meta property="og:locale" content="ja_JP"><meta name="twitter:card" content="summary"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Excel Diff","url":"https://makiabe.github.io/ExcelDiff/","description":"Excel・CSVファイルの差分をブラウザ内で比較する無料ツール。","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","inLanguage":"ja","browserRequirements":"Requires JavaScript and a modern web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script><link rel="stylesheet" href="site.css?v=1.2.0"></head><body><div style="min-height:100vh;background:radial-gradient(ellipse 60% 40% at 75% 18%, rgba(214,238,222,.9), transparent 70%), radial-gradient(ellipse 50% 45% at 10% 10%, rgba(232,246,237,.9), transparent 70%), linear-gradient(180deg,#f1f8f3 0%,#f7fbf8 45%,#eef7f1 100%);">
+</style>{{raw.canonical}}{{raw.alternates}}{{raw.social}}{{raw.structured}}{{raw.stylesheet}}</head><body><div style="min-height:100vh;background:radial-gradient(ellipse 60% 40% at 75% 18%, rgba(214,238,222,.9), transparent 70%), radial-gradient(ellipse 50% 45% at 10% 10%, rgba(232,246,237,.9), transparent 70%), linear-gradient(180deg,#f1f8f3 0%,#f7fbf8 45%,#eef7f1 100%);">
 <header style="background:rgba(255,255,255,.82);backdrop-filter:blur(8px);border-bottom:1px solid #e6efe9;position:sticky;top:0;z-index:20;">
 <div class="header-inner" style="max-width:1340px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center;gap:48px;">
 <a href="#" style="display:flex;align-items:center;gap:12px;color:#1f5a3a;text-decoration:none;">
@@ -18,82 +16,82 @@ button,input{font:inherit}.file-chips{display:grid;grid-template-columns:repeat(
 <span style="font-size:31px;font-weight:700;letter-spacing:-.01em;color:#1d4d33;">Excel Diff</span>
 </a>
 <nav class="primary-nav" style="display:flex;gap:36px;font-size:14px;flex:1;">
-<a href="#" style="color:#15935a;font-weight:500;padding:14px 0 6px;border-bottom:2px solid #15935a;text-decoration:none;">ホーム</a>
-<a href="#howto" style="color:#384840;padding:14px 0 6px;text-decoration:none;">使い方</a>
-<a href="#faq" style="color:#384840;padding:14px 0 6px;text-decoration:none;">よくある質問</a>
-<a href="#privacy" style="color:#384840;padding:14px 0 6px;text-decoration:none;">プライバシー</a>
+<a href="#" style="color:#15935a;font-weight:500;padding:14px 0 6px;border-bottom:2px solid #15935a;text-decoration:none;">{{ui.002}}</a>
+<a href="#howto" style="color:#384840;padding:14px 0 6px;text-decoration:none;">{{ui.003}}</a>
+<a href="#faq" style="color:#384840;padding:14px 0 6px;text-decoration:none;">{{ui.004}}</a>
+<a href="#privacy" style="color:#384840;padding:14px 0 6px;text-decoration:none;">{{ui.005}}</a>
 </nav>
-<div class="locale-switcher" role="group" aria-label="言語を切り替える"><a href="./" lang="ja" hreflang="ja" aria-current="page">日本語</a><a href="en/" lang="en" hreflang="en">English</a></div></div>
+{{raw.languageSwitcher}}</div>
 </header>
-<main style="max-width:1340px;margin:0 auto;padding:0 24px;"><noscript>ファイルの比較にはJavaScriptを有効にしてください。説明とFAQはこのままお読みいただけます。</noscript>
+<main style="max-width:1340px;margin:0 auto;padding:0 24px;"><noscript>{{ui.noScript}}</noscript>
 <section class="hero-section" style="display:flex;flex-wrap:wrap;align-items:flex-start;position:relative;padding-top:26px;">
 <div class="hero-copy" style="flex:1 1 560px;min-width:0;position:relative;z-index:2;padding:0 0 18px 26px;">
-<div style="display:inline-flex;align-items:center;height:34px;padding:0 18px;border-radius:999px;background:#dcf1e3;color:#1c7a45;font-size:14px;font-weight:700;">無料・インストール不要・ブラウザで完結</div>
-<h1 style="margin:22px 0 0;font-size:52px;line-height:1.14;font-weight:900;letter-spacing:-.01em;color:#16241c;">Excelの違い、<br/>猫でも見つけられる。</h1>
-<p style="margin:26px 0 0;font-size:19px;line-height:1.5;color:#3e4a44;text-wrap:pretty;">Excel / CSV を2つドロップするだけで、<br/>セルの変更・行の追加/削除・数式や書式の違いまで、<br/>かんたんに比較できます。完全無料・回数制限なし・ アップロードなしで、<br/>すべてブラウザ内で処理します。</p>
+<div style="display:inline-flex;align-items:center;height:34px;padding:0 18px;border-radius:999px;background:#dcf1e3;color:#1c7a45;font-size:14px;font-weight:700;">{{ui.006}}</div>
+<h1 style="margin:22px 0 0;font-size:52px;line-height:1.14;font-weight:900;letter-spacing:-.01em;color:#16241c;">{{ui.007}}<br/>{{ui.008}}</h1>
+<p style="margin:26px 0 0;font-size:19px;line-height:1.5;color:#3e4a44;text-wrap:pretty;">{{ui.009}}<br/>{{ui.010}}<br/>{{ui.011}}<br/>{{ui.012}}</p>
 <div style="display:flex;flex-wrap:wrap;gap:20px 22px;margin-top:22px;">
 <div style="display:flex;align-items:center;gap:12px;">
 <div style="width:50px;height:50px;border-radius:50%;background:#e2f3e7;display:flex;align-items:center;justify-content:center;color:#1a8a4c;"><svg fill="none" height="24" stroke="currentColor" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24" width="24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">完全無料</div><div style="color:#8a948f;">回数制限なし</div></div>
+<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">{{ui.013}}</div><div style="color:#8a948f;">{{ui.014}}</div></div>
 </div>
 <div style="display:flex;align-items:center;gap:12px;">
 <div style="width:50px;height:50px;border-radius:50%;background:#e8ecfb;display:flex;align-items:center;justify-content:center;color:#5a6ee0;"><svg fill="none" height="24" stroke="currentColor" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div>
-<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">インストール不要</div><div style="color:#8a948f;">ブラウザで完結</div></div>
+<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">{{ui.015}}</div><div style="color:#8a948f;">{{ui.016}}</div></div>
 </div>
 <div style="display:flex;align-items:center;gap:12px;">
 <div style="width:50px;height:50px;border-radius:50%;background:#eceeed;display:flex;align-items:center;justify-content:center;color:#3a4540;"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-width="2.2" viewbox="0 0 24 24" width="22"><rect height="11" rx="2" width="16" x="4" y="11"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path><path d="M12 15v3"></path></svg></div>
-<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">アップロードなし</div><div style="color:#8a948f;">端末内で処理</div></div>
+<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">{{ui.017}}</div><div style="color:#8a948f;">{{ui.018}}</div></div>
 </div>
 <div style="display:flex;align-items:center;gap:12px;">
 <div style="width:50px;height:50px;border-radius:50%;background:#fbe8e9;display:flex;align-items:center;justify-content:center;color:#e0444f;"><svg fill="none" height="24" stroke="currentColor" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24" width="24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"></path></svg></div>
-<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">シンプルで使いやすい</div><div style="color:#8a948f;">誰でもすぐに使える</div></div>
+<div style="font-size:12px;line-height:1.6;"><div style="font-weight:700;color:#1c2b23;">{{ui.019}}</div><div style="color:#8a948f;">{{ui.020}}</div></div>
 </div>
 </div>
 </div>
 <div class="mascot hero-mascot" style="flex:1 1 520px;min-width:0;max-width:800px;margin:-10px -20px 0 -60px;position:relative;z-index:1;pointer-events:none;">
-<img alt="カエルの帽子をかぶった猫とExcelファイル" fetchpriority="high" height="320" src="assets/hero-cat.webp" style="display:block;width:100%;height:auto;" width="640"/>
-</div>
+<img alt="{{mascot.heroAlt}}" fetchpriority="high" height="{{asset.heroHeight}}" src="{{asset.hero}}" style="display:block;width:100%;height:auto;" width="{{asset.heroWidth}}"/>
+{{raw.heroBubble}}</div>
 </section>
 <section style="display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;">
 <div style="flex:1 1 620px;min-width:0;background:rgba(255,255,255,.92);border-radius:14px;padding:12px 12px 10px;box-shadow:0 2px 14px rgba(30,80,50,.05);">
 <input accept=".xlsx,.xls,.csv" id="fileInput" multiple="" style="display:none;" type="file"/>
 <div class="drop-zone" id="dropZone" style="border:1.5px dashed #9fd3b4;background:#f6fcf8;border-radius:10px;padding:18px 20px 12px;text-align:center;cursor:pointer;transition:background .15s,border-color .15s;">
 <svg fill="none" height="46" stroke="#1a8a4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" style="display:block;margin:0 auto;" viewbox="0 0 24 19" width="58"><path d="M16 13l-4-4-4 4"></path><path d="M12 9v9"></path><path d="M19.4 15.4A4.5 4.5 0 0 0 17 7h-1.1A7 7 0 1 0 4 13.6"></path></svg>
-<div style="margin-top:10px;font-size:19px;font-weight:700;color:#1c2b23;">ここにExcel / CSVファイルをドロップ</div>
-<div style="margin-top:4px;font-size:15px;color:#4a5550;">または<span style="color:#15935a;font-weight:700;">クリックしてファイルを選択</span></div>
+<div style="margin-top:10px;font-size:19px;font-weight:700;color:#1c2b23;">{{ui.021}}</div>
+<div style="margin-top:4px;font-size:15px;color:#4a5550;">{{ui.022}}<span style="color:#15935a;font-weight:700;">{{ui.023}}</span></div>
 <div aria-live="polite" class="file-chips" id="fileChips">
-<div class="file-slot empty"><span class="file-slot-label">A・比較元</span><span class="file-slot-name">未選択</span></div>
-<div class="file-slot empty"><span class="file-slot-label">B・比較先</span><span class="file-slot-name">未選択</span></div>
+<div class="file-slot empty"><span class="file-slot-label">{{ui.024}}</span><span class="file-slot-name">{{ui.025}}</span></div>
+<div class="file-slot empty"><span class="file-slot-label">{{ui.026}}</span><span class="file-slot-name">{{ui.027}}</span></div>
 </div>
-<div style="margin-top:10px;font-size:12.5px;color:#7b8580;">対応形式：.xlsx / .xls / .csv　 ※ ファイルはブラウザ内で処理され、サーバーには送信されません。</div>
+<div style="margin-top:10px;font-size:12.5px;color:#7b8580;">{{ui.028}}</div>
 </div>
-<div class="file-tools"><button disabled="" id="swapFiles" type="button">AとBを入れ替える</button><button id="clearFiles" type="button">選択をクリア</button></div><div style="display:flex;align-items:center;gap:10px;margin:18px 0 10px 8px;">
+<div class="file-tools"><button disabled="" id="swapFiles" type="button">{{ui.029}}</button><button id="clearFiles" type="button">{{ui.030}}</button></div><div style="display:flex;align-items:center;gap:10px;margin:18px 0 10px 8px;">
 <svg fill="none" height="24" stroke="#1a8a4c" stroke-width="2.2" viewbox="0 0 24 24" width="24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-<span style="font-size:17px;font-weight:700;color:#1c2b23;">比較オプション</span>
+<span style="font-size:17px;font-weight:700;color:#1c2b23;">{{ui.031}}</span>
 </div>
 <div class="options-grid" style="border:1px solid #e3e9e5;border-radius:10px;padding:12px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 0;">
 <div class="options-column" style="display:flex;flex-direction:column;gap:10px;padding:2px 20px 2px 0;font-size:14.5px;color:#2a3530;">
-<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="ignoreWhitespace" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>空白を無視する</label>
-<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="ignoreCase" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>大文字小文字を無視する</label>
-<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="compareFormulas" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>数式の違いも検出する</label>
-<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="compareStyles" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>書式の違いも検出する</label><label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="compareTypes" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>数値と文字列を区別する</label>
+<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="ignoreWhitespace" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>{{ui.032}}</label>
+<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="ignoreCase" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>{{ui.033}}</label>
+<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="compareFormulas" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>{{ui.034}}</label>
+<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="compareStyles" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>{{ui.035}}</label><label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="compareTypes" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="checkbox"/>{{ui.036}}</label>
 </div>
 <div class="options-column" style="display:flex;flex-direction:column;gap:6px;padding:0 22px;border-left:1px solid #e3e9e5;font-size:14px;color:#2a3530;font-weight:500;">
-<span>比較対象外の列</span>
-<input aria-label="比較対象外の列" id="excludeColumns" placeholder="例）A,C,F" style="height:34px;border:1px solid #dfe5e1;border-radius:7px;padding:0 12px;font:inherit;font-weight:400;font-size:14px;color:#2a3530;outline:none;" style-focus="border-color:#15935a;box-shadow:0 0 0 3px rgba(21,147,90,.12);" type="text"/>
-<span style="margin-top:8px;">主キー（行の一致判定に使用）</span>
-<input aria-label="主キー（行の一致判定に使用）" id="primaryKey" placeholder="例）ID または A（複数は A,B）" style="height:34px;border:1px solid #dfe5e1;border-radius:7px;padding:0 12px;font:inherit;font-weight:400;font-size:14px;color:#2a3530;outline:none;" style-focus="border-color:#15935a;box-shadow:0 0 0 3px rgba(21,147,90,.12);" type="text"/>
+<span>{{ui.037}}</span>
+<input aria-label="{{form.excludeLabel}}" id="excludeColumns" placeholder="{{ui.092}}" style="height:34px;border:1px solid #dfe5e1;border-radius:7px;padding:0 12px;font:inherit;font-weight:400;font-size:14px;color:#2a3530;outline:none;" style-focus="border-color:#15935a;box-shadow:0 0 0 3px rgba(21,147,90,.12);" type="text"/>
+<span style="margin-top:8px;">{{ui.038}}</span>
+<input aria-label="{{form.keyLabel}}" id="primaryKey" placeholder="{{ui.093}}" style="height:34px;border:1px solid #dfe5e1;border-radius:7px;padding:0 12px;font:inherit;font-weight:400;font-size:14px;color:#2a3530;outline:none;" style-focus="border-color:#15935a;box-shadow:0 0 0 3px rgba(21,147,90,.12);" type="text"/>
 </div>
 <div class="options-column" style="display:flex;flex-direction:column;gap:10px;padding:0 0 0 22px;border-left:1px solid #e3e9e5;font-size:14.5px;color:#2a3530;">
-<span style="font-size:14px;font-weight:500;">表示オプション</span>
-<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="viewAll" name="view" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="radio" value="all"/>すべての行を表示</label>
-<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="viewDiff" name="view" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="radio" value="diff"/>差分のある行だけ表示</label>
-<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="viewCells" name="view" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="radio" value="cells"/>変更されたセルだけ強調</label>
+<span style="font-size:14px;font-weight:500;">{{ui.039}}</span>
+<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="viewAll" name="view" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="radio" value="all"/>{{ui.040}}</label>
+<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input checked="" id="viewDiff" name="view" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="radio" value="diff"/>{{ui.041}}</label>
+<label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input id="viewCells" name="view" style="width:19px;height:19px;margin:0;accent-color:#2a6fe0;" type="radio" value="cells"/>{{ui.042}}</label>
 </div>
 </div>
-<p class="compare-note"><strong>先頭行も比較します。</strong>主キー未指定時は同じセル位置で比較します。行の並べ替え・途中の追加削除がある表は、重複しないID列を主キーに指定してください。列名は1行目から取得します。</p><details class="scope-note"><summary>比較できる内容・制限</summary><p>XLSXの保存値・データ型・数式・標準セル書式（背景色、フォント、罫線、配置、表示形式）、セル結合、行列サイズなどを比較します。条件付き書式の評価結果、画像・図形、コメント、リンク先、印刷設定、テーブルスタイル、マクロは比較対象外です。</p><p>数式は再計算しません。CSVは文字列として読み込み、先頭ゼロを保持します。XLSは互換読み込みで、書式比較は表示形式のみです。50MB/ファイル、50万セル/ファイル、比較200万セル組/シートが安全上の上限です。範囲外のデータを黙って省略しません。</p></details><div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:10px;">
+<p class="compare-note"><strong>{{ui.043}}</strong>{{ui.044}}</p><details class="scope-note"><summary>{{ui.045}}</summary><p>{{ui.046}}</p><p>{{ui.047}}</p></details><div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:10px;">
 <button id="compareBtn" style="width:340px;max-width:100%;height:54px;border:none;border-radius:8px;background:linear-gradient(180deg,#1c9a55,#137a42);color:#fff;font:inherit;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:12px;position:relative;cursor:pointer;box-shadow:0 4px 12px rgba(19,122,66,.25);" style-active="transform:translateY(1px);" style-hover="filter:brightness(1.06);">
-<svg fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-width="2.4" viewbox="0 0 24 24" width="28"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>比較する<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" style="position:absolute;right:26px;" viewbox="0 0 24 24" width="18"><path d="m9 18 6-6-6-6"></path></svg>
+<svg fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-width="2.4" viewbox="0 0 24 24" width="28"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>{{ui.048}}<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" style="position:absolute;right:26px;" viewbox="0 0 24 24" width="18"><path d="m9 18 6-6-6-6"></path></svg>
 </button>
 <div aria-live="polite" class="message" id="message"></div></div>
 </div>
@@ -101,34 +99,34 @@ button,input{font:inherit}.file-chips{display:grid;grid-template-columns:repeat(
 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 10px 0 10px;margin-bottom:10px;">
 <div style="display:flex;align-items:center;gap:10px;">
 <svg fill="#e2f3e7" height="26" stroke="#1a8a4c" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24" width="26"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-<span style="font-size:17px;font-weight:700;color:#1c2b23;">主な機能</span>
+<span style="font-size:17px;font-weight:700;color:#1c2b23;">{{ui.049}}</span>
 </div>
-<span style="font-size:12.5px;color:#7b8580;">すべて無料でご利用いただけます！</span>
+<span style="font-size:12.5px;color:#7b8580;">{{ui.050}}</span>
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
 <div style="display:flex;gap:12px;padding:16px 10px;border:1px solid #e3e9e5;border-radius:8px;background:#fff;">
 <div style="flex:none;width:58px;height:58px;border-radius:50%;background:#e2f3e7;display:flex;align-items:center;justify-content:center;color:#1a8a4c;"><svg fill="none" height="28" stroke="currentColor" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="28"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg></div>
-<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">XLSX / CSV 比較</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">Excel・CSVファイルを<br/>かんたん比較</div></div>
+<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">{{ui.051}}</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">{{ui.052}}<br/>{{ui.053}}</div></div>
 </div>
 <div style="display:flex;gap:12px;padding:16px 10px;border:1px solid #e3e9e5;border-radius:8px;background:#fff;">
 <div style="flex:none;width:58px;height:58px;border-radius:50%;background:#e2f3e7;display:flex;align-items:center;justify-content:center;color:#1a8a4c;"><svg fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-width="2.4" viewbox="0 0 24 24" width="28"><path d="M9 6h12M9 12h12M9 18h12M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg></div>
-<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">セルの変更を検出</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">値・数式・書式の<br/>変更を検出</div></div>
+<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">{{ui.054}}</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">{{ui.055}}<br/>{{ui.056}}</div></div>
 </div>
 <div style="display:flex;gap:12px;padding:16px 10px;border:1px solid #e3e9e5;border-radius:8px;background:#fff;">
 <div style="flex:none;width:58px;height:58px;border-radius:50%;background:#e2f3e7;display:flex;align-items:center;justify-content:center;"><svg fill="none" height="30" stroke-linecap="round" stroke-width="2.4" viewbox="0 0 24 24" width="30"><path d="M3 9h8M7 5v8" stroke="#1a8a4c"></path><path d="M13 16h8" stroke="#e0444f"></path></svg></div>
-<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">行の追加・削除</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">追加・削除された<br/>行を検出</div></div>
+<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">{{ui.057}}</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">{{ui.058}}<br/>{{ui.059}}</div></div>
 </div>
 <div style="display:flex;gap:12px;padding:16px 10px;border:1px solid #e3e9e5;border-radius:8px;background:#fff;">
 <div style="flex:none;width:58px;height:58px;border-radius:50%;background:#e2f3e7;display:flex;align-items:center;justify-content:center;color:#1a8a4c;"><svg fill="currentColor" height="30" stroke="currentColor" stroke-width="1" viewbox="0 0 24 24" width="30"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path><circle cx="12" cy="12" fill="#e2f3e7" r="3" stroke="none"></circle></svg></div>
-<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">柔軟な比較設定</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">空白/大文字小文字無視<br/>特定列の除外・主キー指定</div></div>
+<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">{{ui.060}}</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">{{ui.061}}<br/>{{ui.062}}</div></div>
 </div>
 <div style="display:flex;gap:12px;padding:16px 10px;border:1px solid #e3e9e5;border-radius:8px;background:#fff;">
 <div style="flex:none;width:58px;height:58px;border-radius:50%;background:#e2f3e7;display:flex;align-items:center;justify-content:center;"><svg height="30" viewbox="0 0 30 30" width="30"><rect fill="#2fb36b" height="22" rx="2" width="17" x="10" y="4"></rect><path d="M14 10h10M14 15h10M14 20h10" opacity=".7" stroke="#fff" stroke-width="1.6"></path><rect fill="#137a42" height="15" rx="2" width="15" x="3" y="8"></rect><path d="M7 12l7 7M14 12l-7 7" stroke="#fff" stroke-linecap="round" stroke-width="2.4"></path></svg></div>
-<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">差分Excel出力</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">差分だけのExcelを<br/>ダウンロード</div></div>
+<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">{{ui.063}}</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">{{ui.064}}<br/>{{ui.065}}</div></div>
 </div>
 <div style="display:flex;gap:12px;padding:16px 10px;border:1px solid #e3e9e5;border-radius:8px;background:#fff;">
 <div style="flex:none;width:58px;height:58px;border-radius:50%;background:#e8ecfb;display:flex;align-items:center;justify-content:center;color:#4a62dc;"><svg fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="28"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M8 13h8M8 17h8M8 9h2"></path></svg></div>
-<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">HTML・PDFレポート</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">見やすいレポートを<br/>生成・ダウンロード</div></div>
+<div><div style="font-size:15px;font-weight:700;color:#1c2b23;">{{ui.066}}</div><div style="margin-top:4px;font-size:12.5px;line-height:1.6;color:#7b8580;">{{ui.067}}<br/>{{ui.068}}</div></div>
 </div>
 </div>
 </div>
@@ -137,23 +135,23 @@ button,input{font:inherit}.file-chips{display:grid;grid-template-columns:repeat(
 <div style="flex:1 1 520px;min-width:0;display:flex;align-items:center;gap:24px;padding:16px 0;">
 <div style="flex:none;width:84px;height:84px;border-radius:50%;background:#e2f3e7;display:flex;align-items:center;justify-content:center;color:#1a8a4c;"><svg fill="none" height="38" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="38"><rect height="11" rx="2" width="16" x="4" y="11"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path><circle cx="12" cy="16" fill="currentColor" r="1.2"></circle><path d="M12 17v2"></path></svg></div>
 <div style="min-width:0;">
-<div style="font-size:17px;font-weight:700;color:#1c2b23;">あなたのファイルは、どこにも送信されません</div>
-<p style="margin:10px 0 0;font-size:13px;line-height:1.6;color:#6c7671;text-wrap:pretty;">Excel Diff は すべての処理をブラウザ内で行います。<br/>アップロード不要で、あなたのファイルがサーバーに送信されることはありません。安心してご利用いただけます。</p>
+<div style="font-size:17px;font-weight:700;color:#1c2b23;">{{ui.069}}</div>
+<p style="margin:10px 0 0;font-size:13px;line-height:1.6;color:#6c7671;text-wrap:pretty;">{{ui.070}}<br/>{{ui.071}}</p>
 </div>
 </div>
-<div class="mascot bottom-mascot"><img alt="カエルの帽子をかぶった猫" height="160" loading="lazy" src="assets/bottom-cat.webp" style="display:block;width:100%;height:auto;" width="480"/></div>
+<div class="mascot bottom-mascot"><img alt="{{mascot.bottomAlt}}" height="{{asset.bottomHeight}}" loading="lazy" src="{{asset.bottom}}" style="display:block;width:100%;height:auto;" width="{{asset.bottomWidth}}"/>{{raw.bottomBubble}}</div>
 </section>
 <section class="results-card" hidden="" id="results">
 <div class="results-head">
-<div><span class="eyebrow">比較結果</span><h2>差分レポート</h2><p id="resultSummary"></p></div>
-<div class="export-actions"><button id="exportExcel">差分Excel</button><button id="exportHtml">HTML</button><button id="exportPdf">PDF（印刷）</button></div>
+<div><span class="eyebrow">{{ui.072}}</span><h2>{{ui.073}}</h2><p id="resultSummary"></p></div>
+<div class="export-actions"><button id="exportExcel">{{ui.074}}</button><button id="exportHtml">HTML</button><button id="exportPdf">{{ui.075}}</button></div>
 </div>
 <div class="diagnostics" id="diagnostics"></div><div class="result-warnings" hidden="" id="resultWarnings"></div><div class="sheet-tabs" id="sheetTabs"></div>
 <div class="table-wrap" id="resultTableWrap"></div><div class="pagination" id="pagination"></div>
 </section>
-<section class="info-card" id="howto"><h2>使い方</h2><div class="steps"><div><b>1</b><span>比較したいExcel / CSVを2つ選ぶ</span></div><div><b>2</b><span>必要なら空白・大文字小文字・主キーなどを設定</span></div><div><b>3</b><span>「比較する」で差分を確認し、レポートを保存</span></div></div></section>
-<section class="info-card" id="faq"><h2>よくある質問</h2><details><summary>ファイルはサーバーに送られますか？</summary><p>送られません。読み込み・比較・レポート生成はすべてブラウザ内で処理します。</p></details><details><summary>XLSXとCSVを比較できますか？</summary><p>できます。CSVは1シートのブックとして扱います。</p></details><details><summary>主キーは何に使いますか？</summary><p>IDなどの列を指定すると、行番号ではなくキーの一致で追加・削除・変更を判定できます。</p></details></section>
-<section class="info-card" id="privacy"><h2>プライバシー</h2><p>Excel Diffは静的Webアプリです。選択したファイルを外部サーバーへアップロードしません。XLSX / CSVは外部ライブラリのダウンロードなしで処理します。旧形式のXLSを選んだ場合だけ互換ライブラリをCDNから取得しますが、ファイル本体は送信しません。</p></section>
+<section class="info-card" id="howto"><h2>{{ui.076}}</h2><div class="steps"><div><b>1</b><span>{{ui.077}}</span></div><div><b>2</b><span>{{ui.078}}</span></div><div><b>3</b><span>{{ui.079}}</span></div></div></section>
+<section class="info-card" id="faq"><h2>{{ui.080}}</h2><details><summary>{{ui.081}}</summary><p>{{ui.082}}</p></details><details><summary>{{ui.083}}</summary><p>{{ui.084}}</p></details><details><summary>{{ui.085}}</summary><p>{{ui.086}}</p></details></section>
+<section class="info-card" id="privacy"><h2>{{ui.087}}</h2><p>{{ui.088}}</p></section>
 </main>
 <footer style="margin-top:14px;background:rgba(255,255,255,.85);border-top:1px solid #e6efe9;">
 <div style="max-width:1340px;margin:0 auto;padding:18px 48px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;font-size:13px;color:#6c7671;">
@@ -161,8 +159,8 @@ button,input{font:inherit}.file-chips{display:grid;grid-template-columns:repeat(
 <span style="font-size:14px;font-weight:500;color:#1c2b23;">Excel Diff</span>
 <span id="appVersion">v1.2.0</span>
 <span style="width:1px;height:14px;background:#d6ddd9;"></span>
-<span>Excelの違いを、もっと簡単に。</span>
+<span>{{ui.089}}</span>
 </div>
 </div>
 </footer>
-</div><script src="locales/ja.js?v=1.2.0"></script><script src="i18n.js?v=1.2.0"></script><script src="file-codec.js?v=1.2.0"></script><script src="diff-engine.js?v=1.2.0"></script><script src="app.js?v=1.2.0"></script></body></html>
+</div><script src="{{base}}locales/{{lang}}.js?v=1.2.0"></script><script src="{{base}}i18n.js?v=1.2.0"></script><script src="{{base}}file-codec.js?v=1.2.0"></script><script src="{{base}}diff-engine.js?v=1.2.0"></script><script src="{{base}}app.js?v=1.2.0"></script></body></html>

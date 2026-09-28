@@ -16,45 +16,45 @@
   const unescapeExcel = s => String(s).replace(/_x([0-9a-f]{4})_/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
   function colName(c) { let s = ''; for (c++; c > 0; c = Math.floor((c - 1) / 26)) s = String.fromCharCode(65 + (c - 1) % 26) + s; return s; }
   function colIndex(s) { let c = 0; for (const ch of s.toUpperCase()) c = c * 26 + ch.charCodeAt(0) - 64; return c - 1; }
-  function address(s) { const m = /^\$?([A-Z]{1,3})\$?([1-9]\d*)$/i.exec(s); if (!m) throw new Error(`不正なセル番地: ${s}`); const c = colIndex(m[1]), r = +m[2]; if (c > 16383 || r > 1048576) throw new Error(`Excelの範囲外のセル番地: ${s}`); return {r, c}; }
+  function address(s) { const m = /^\$?([A-Z]{1,3})\$?([1-9]\d*)$/i.exec(s); if (!m) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.001',{p0:s})); const c = colIndex(m[1]), r = +m[2]; if (c > 16383 || r > 1048576) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.002',{p0:s})); return {r, c}; }
   const crcTable = Uint32Array.from({length:256}, (_, n) => { for(let k = 0; k < 8; k++) n = (n & 1) ? 0xedb88320 ^ (n >>> 1) : n >>> 1; return n >>> 0; });
   function crc32(bytes) { let c = 0xffffffff; for (const b of bytes) c = crcTable[(c ^ b) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
   function decodeXml(bytes) { if (bytes[0] === 255 && bytes[1] === 254) return new TextDecoder('utf-16le', {fatal:true}).decode(bytes); if (bytes[0] === 254 && bytes[1] === 255) return new TextDecoder('utf-16be', {fatal:true}).decode(bytes); return new TextDecoder('utf-8', {fatal:true}).decode(bytes); }
-  function parseXml(bytes, path) { const s = decodeXml(bytes); if (/<!DOCTYPE|<!ENTITY/i.test(s)) throw new Error(`${path}: DTDを含むXMLには対応していません。`); const doc = new DOMParser().parseFromString(s, 'application/xml'); if (nodes(doc, 'parsererror').length) throw new Error(`${path}: XMLが破損しています。`); return doc; }
-  function resolvePath(base, target) { if (/^[a-z][a-z0-9+.-]*:/i.test(target)) throw new Error('外部パーツの読み込みは行いません。'); const parts = (target.startsWith('/') ? target.slice(1) : base.slice(0, base.lastIndexOf('/') + 1) + target).split('/'); const out = []; for (const p of parts) { if (p === '..') { if (!out.length) throw new Error('不正なパーツのパスです。'); out.pop(); } else if (p && p !== '.') out.push(p); } return out.join('/'); }
+  function parseXml(bytes, path) { const s = decodeXml(bytes); if (/<!DOCTYPE|<!ENTITY/i.test(s)) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.003',{p0:path})); const doc = new DOMParser().parseFromString(s, 'application/xml'); if (nodes(doc, 'parsererror').length) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.004',{p0:path})); return doc; }
+  function resolvePath(base, target) { if (/^[a-z][a-z0-9+.-]*:/i.test(target)) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.005')); const parts = (target.startsWith('/') ? target.slice(1) : base.slice(0, base.lastIndexOf('/') + 1) + target).split('/'); const out = []; for (const p of parts) { if (p === '..') { if (!out.length) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.006')); out.pop(); } else if (p && p !== '.') out.push(p); } return out.join('/'); }
   class ZipReader {
     constructor(buffer) {
       this.bytes = new Uint8Array(buffer); this.view = new DataView(buffer); this.entries = new Map(); this.expanded = 0;
       const b = this.bytes, v = this.view; let e = -1;
       for (let p = b.length - 22; p >= Math.max(0, b.length - 65557); p--) if (v.getUint32(p, true) === 0x06054b50 && p + 22 + v.getUint16(p + 20, true) === b.length) {e = p; break;}
-      if (e < 0) throw new Error('XLSXのZIP構造を読み取れません。暗号化ファイルや破損ファイルをご確認ください。');
+      if (e < 0) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.007'));
       const count = v.getUint16(e + 10, true); let p = v.getUint32(e + 16, true);
-      if (count === 65535 || p === 0xffffffff || v.getUint16(e + 4, true) !== 0) throw new Error('ZIP64・分割ZIPには対応していません。');
+      if (count === 65535 || p === 0xffffffff || v.getUint16(e + 4, true) !== 0) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.008'));
       for (let i = 0; i < count; i++) {
-        if (p + 46 > b.length || v.getUint32(p, true) !== 0x02014b50) throw new Error('ZIPの管理情報が破損しています。');
+        if (p + 46 > b.length || v.getUint32(p, true) !== 0x02014b50) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.009'));
         const flag = v.getUint16(p + 8, true), method = v.getUint16(p + 10, true), crc = v.getUint32(p + 16, true), size = v.getUint32(p + 20, true), rawSize = v.getUint32(p + 24, true), n = v.getUint16(p + 28, true), x = v.getUint16(p + 30, true), cm = v.getUint16(p + 32, true), offset = v.getUint32(p + 42, true);
         const name = new TextDecoder('utf-8', {fatal:true}).decode(b.subarray(p + 46, p + 46 + n));
-        if (this.entries.has(name)) throw new Error('同名のZIPパーツが重複しています。');
+        if (this.entries.has(name)) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.010'));
         this.entries.set(name, {flag, method, crc, size, rawSize, offset}); p += 46 + n + x + cm;
       }
     }
     async read(name, optional = false) {
-      const e = this.entries.get(name); if (!e) { if (optional) return null; throw new Error(`必要なパーツが見つかりません: ${name}`); }
-      if (e.flag & 1) throw new Error('暗号化されたファイルには対応していません。');
-      if (e.rawSize > LIMITS.part || this.expanded + e.rawSize > LIMITS.expanded) throw new Error('展開後のサイズが安全上の上限を超えます。ファイルを分割して比較してください。');
+      const e = this.entries.get(name); if (!e) { if (optional) return null; throw new Error(globalThis.ExcelDiffI18n.t('file-codec.011',{p0:name})); }
+      if (e.flag & 1) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.012'));
+      if (e.rawSize > LIMITS.part || this.expanded + e.rawSize > LIMITS.expanded) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.013'));
       const v = this.view, p = e.offset;
-      if (p + 30 > this.bytes.length || v.getUint32(p, true) !== 0x04034b50) throw new Error('ZIPのデータ位置が不正です。');
+      if (p + 30 > this.bytes.length || v.getUint32(p, true) !== 0x04034b50) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.014'));
       const start = p + 30 + v.getUint16(p + 26, true) + v.getUint16(p + 28, true);
-      if (start + e.size > this.bytes.length) throw new Error('ZIPのデータが途中で切れています。');
+      if (start + e.size > this.bytes.length) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.015'));
       const input = this.bytes.subarray(start, start + e.size); let data;
       if (e.method === 0) data = input;
       else if (e.method === 8) {
-        let ds; try { ds = new DecompressionStream('deflate-raw'); } catch { throw new Error('このブラウザはXLSXの展開に対応していません。新しいChrome・Edge・Firefox・Safariをお使いください。'); }
+        let ds; try { ds = new DecompressionStream('deflate-raw'); } catch { throw new Error(globalThis.ExcelDiffI18n.t('file-codec.016')); }
         const reader = new Blob([input]).stream().pipeThrough(ds).getReader(), chunks = []; let size = 0;
-        while (true) { const {value, done} = await reader.read(); if (done) break; size += value.length; if (size > e.rawSize || size > LIMITS.part) { await reader.cancel(); throw new Error('展開サイズが不正です。'); } chunks.push(value); }
+        while (true) { const {value, done} = await reader.read(); if (done) break; size += value.length; if (size > e.rawSize || size > LIMITS.part) { await reader.cancel(); throw new Error(globalThis.ExcelDiffI18n.t('file-codec.017')); } chunks.push(value); }
         data = new Uint8Array(size); let pos = 0; for (const c of chunks) { data.set(c, pos); pos += c.length; }
-      } else throw new Error(`未対応のZIP圧縮方式です: ${e.method}`);
-      if (data.length !== e.rawSize || crc32(data) !== e.crc) throw new Error(`データの整合性チェックに失敗しました: ${name}`);
+      } else throw new Error(globalThis.ExcelDiffI18n.t('file-codec.018',{p0:e.method}));
+      if (data.length !== e.rawSize || crc32(data) !== e.crc) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.019',{p0:name}));
       this.expanded += data.length; return data;
     }
     async xml(path, optional = false) { const bytes = await this.read(path, optional); return bytes ? parseXml(bytes, path) : null; }
@@ -68,22 +68,22 @@
     const fonts = children(child(root, 'fonts')), fills = children(child(root, 'fills')), borders = children(child(root, 'borders'));
     const base = children(child(root, 'cellStyleXfs')), xfs = children(child(root, 'cellXfs'));
     const formats = new Map(children(child(root, 'numFmts')).map(n => [+a(n,'numFmtId'), a(n,'formatCode')]));
-    if (!xfs.length) throw new Error('セル書式テーブルが空です。');
+    if (!xfs.length) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.020'));
     return xfs.map(n => {
       const parent = base[+a(n,'xfId','0')];
       const part = (id, array, apply) => {
         const src = a(n, apply) === '0' || a(n, apply) === 'false' ? (parent || n) : n;
-        const i = +(a(src,id) || a(parent,id,'0')); const node = array[i]; if (!node && i !== 0) throw new Error(`書式参照が不正です: ${id}=${i}`); return canonical(node);
+        const i = +(a(src,id) || a(parent,id,'0')); const node = array[i]; if (!node && i !== 0) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.021',{p0:id,p1:i})); return canonical(node);
       };
       const inherit = (name, apply) => canonical((a(n,apply) === '0' ? null : child(n,name)) || child(parent,name));
       const numSrc = a(n,'applyNumberFormat') === '0' ? (parent || n) : n;
       const numId = +(a(numSrc,'numFmtId') || a(parent,'numFmtId','0'));
-      return {font:part('fontId',fonts,'applyFont'), fill:part('fillId',fills,'applyFill'), border:part('borderId',borders,'applyBorder'), alignment:inherit('alignment','applyAlignment'), numFmt:formats.get(numId) ?? BUILTIN[numId] ?? `組み込み書式 ${numId}`, protection:inherit('protection','applyProtection'), flags:JSON.stringify({quotePrefix:a(n,'quotePrefix','0'),pivotButton:a(n,'pivotButton','0')})};
+      return {font:part('fontId',fonts,'applyFont'), fill:part('fillId',fills,'applyFill'), border:part('borderId',borders,'applyBorder'), alignment:inherit('alignment','applyAlignment'), numFmt:formats.get(numId) ?? BUILTIN[numId] ?? globalThis.ExcelDiffI18n.t('file-codec.022',{p0:numId}), protection:inherit('protection','applyProtection'), flags:JSON.stringify({quotePrefix:a(n,'quotePrefix','0'),pivotButton:a(n,'pivotButton','0')})};
     });
   }
   function richString(n) { return unescapeExcel(children(n).map(x => x.localName === 't' ? text(x) : x.localName === 'r' ? text(child(x,'t')) : '').join('')); }
   function makeSheet(name) { return {name, rows:new Map(), maxRow:0, maxCol:0, defaultStyle:{}, rowStyles:new Map(), colStyles:[], metadata:{}, warnings:[]}; }
-  function putCell(sheet, r, c, cell) { if (!sheet.rows.has(r)) sheet.rows.set(r, new Map()); const row = sheet.rows.get(r); if (row.has(c)) throw new Error(`${sheet.name}!${colName(c)}${r}: セルが重複しています。`); row.set(c, {...cell, addr:colName(c)+r}); sheet.maxRow = Math.max(sheet.maxRow,r); sheet.maxCol = Math.max(sheet.maxCol,c+1); }
+  function putCell(sheet, r, c, cell) { if (!sheet.rows.has(r)) sheet.rows.set(r, new Map()); const row = sheet.rows.get(r); if (row.has(c)) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.023',{p0:sheet.name,p1:colName(c),p2:r})); row.set(c, {...cell, addr:colName(c)+r}); sheet.maxRow = Math.max(sheet.maxRow,r); sheet.maxCol = Math.max(sheet.maxCol,c+1); }
   function shiftFormula(formula, dr, dc) {
     // Quoted strings and quoted sheet names must not be rewritten.
     return formula.split(/("(?:[^"\n]|"")*"|'(?:[^']|'')*')/g).map((part,i) => {
@@ -100,9 +100,9 @@
   async function readXlsx(buffer, name) {
     const zip = new ZipReader(buffer), rels = await zip.xml('_rels/.rels');
     const office = nodes(rels,'Relationship').find(n => a(n,'Type').endsWith('/officeDocument'));
-    if (!office || a(office,'TargetMode') === 'External') throw new Error('Excelブックの構造が見つかりません。');
+    if (!office || a(office,'TargetMode') === 'External') throw new Error(globalThis.ExcelDiffI18n.t('file-codec.024'));
     const path = resolvePath('',a(office,'Target')), workbook = await zip.xml(path);
-    if (workbook.documentElement.localName !== 'workbook') throw new Error('XLSXのworkbookパーツが不正です。');
+    if (workbook.documentElement.localName !== 'workbook') throw new Error(globalThis.ExcelDiffI18n.t('file-codec.025'));
     const rp = path.slice(0,path.lastIndexOf('/')+1)+'_rels/'+path.slice(path.lastIndexOf('/')+1)+'.rels';
     const relations = nodes(await zip.xml(rp),'Relationship');
     const relPath = suffix => {const n=relations.find(n=>a(n,'Type').endsWith('/'+suffix)); return n && a(n,'TargetMode') !== 'External' ? resolvePath(path,a(n,'Target')) : null;};
@@ -114,59 +114,59 @@
     for (const info of nodes(workbook,'sheet')) {
       const rid = [...info.attributes].find(x=>x.localName==='id')?.value;
       const rel=relations.find(n=>a(n,'Id')===rid);
-      if (!rel || a(rel,'TargetMode')==='External' || !a(rel,'Type').endsWith('/worksheet')) throw new Error(`${a(info,'name')}: 通常ワークシート以外のシートを含みます。対象シートだけを別のXLSXに保存してください。`);
+      if (!rel || a(rel,'TargetMode')==='External' || !a(rel,'Type').endsWith('/worksheet')) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.026',{p0:a(info,'name')}));
       const sheet=makeSheet(a(info,'name')), doc=await zip.xml(resolvePath(path,a(rel,'Target'))), root=doc.documentElement;
-      if (sheets.some(s=>s.name===sheet.name)) throw new Error('シート名が重複しています。');
+      if (sheets.some(s=>s.name===sheet.name)) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.027'));
       sheet.defaultStyle=styles[0];
       const cols=nodes(doc,'col');
-      for (const col of cols) if (a(col,'style')) { const style=styles[+a(col,'style')]; if (!style) throw new Error('列書式の参照が不正です。'); sheet.colStyles.push({min:+a(col,'min')-1,max:+a(col,'max')-1,style}); }
+      for (const col of cols) if (a(col,'style')) { const style=styles[+a(col,'style')]; if (!style) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.028')); sheet.colStyles.push({min:+a(col,'min')-1,max:+a(col,'max')-1,style}); }
       const rowDims=[], sharedFormula=new Map(), pending=[]; let previousRow=0, noCache=0;
       for (const row of children(child(root,'sheetData'),'row')) {
         const r=+(a(row,'r') || previousRow+1); previousRow=r; let cPrev=-1;
-        if(a(row,'s') && a(row,'customFormat','1') !== '0') { const style=styles[+a(row,'s')]; if(!style) throw new Error('行書式の参照が不正です。'); sheet.rowStyles.set(r,style); }
+        if(a(row,'s') && a(row,'customFormat','1') !== '0') { const style=styles[+a(row,'s')]; if(!style) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.029')); sheet.rowStyles.set(r,style); }
         const dims={}; for (const k of ['ht','hidden','outlineLevel','collapsed']) if(a(row,k) && a(row,k)!=='0') dims[k]=a(row,k);
         if(Object.keys(dims).length) rowDims.push([r,dims]);
         for (const n of children(row,'c')) {
           const pos=a(n,'r') ? address(a(n,'r')) : {r,c:cPrev+1}; cPrev=pos.c;
-          if(pos.r!==r) throw new Error('行番号とセル番地が一致していません。');
-          if(++totalCells>LIMITS.cells) throw new Error('セル数が50万を超えます。安全のため処理を中断しました。ファイルを分割してください。');
+          if(pos.r!==r) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.030'));
+          if(++totalCells>LIMITS.cells) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.031'));
           const vn=child(n,'v'), fn=child(n,'f'), type=a(n,'t','n'), raw=text(vn); let v=null,t='blank',rich='';
-          if(type==='s') { const entry=shared[Number(raw)]; if(!vn || !/^\d+$/.test(raw) || !entry) throw new Error(`${sheet.name}!${a(n,'r')}: 共有文字列の参照が不正です。`); v=entry.v;t='s';rich=entry.rich; }
+          if(type==='s') { const entry=shared[Number(raw)]; if(!vn || !/^\d+$/.test(raw) || !entry) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.032',{p0:sheet.name,p1:a(n,'r')})); v=entry.v;t='s';rich=entry.rich; }
           else if(type==='inlineStr') { const si=child(n,'is'); v=richString(si);t='s';rich=children(si,'r').length?canonical(si):''; }
           else if(type==='str') { v=unescapeExcel(raw);t='s'; }
           else if(vn && raw!=='') {
-            if(type==='b') { if(raw!=='0'&&raw!=='1') throw new Error('論理値が不正です。'); v=raw==='1';t='b'; }
+            if(type==='b') { if(raw!=='0'&&raw!=='1') throw new Error(globalThis.ExcelDiffI18n.t('file-codec.033')); v=raw==='1';t='b'; }
             else if(type==='e') {v=raw;t='e';}
-            else if(type==='d') { const d=new Date(raw); if(!Number.isFinite(d.getTime())) throw new Error('日付値が不正です。');v=d.toISOString();t='d'; }
-            else if(type==='n') {v=Number(raw);t='n';if(!Number.isFinite(v)) throw new Error('数値が不正です。');}
-            else throw new Error(`未対応のセル型: ${type}`);
+            else if(type==='d') { const d=new Date(raw); if(!Number.isFinite(d.getTime())) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.034'));v=d.toISOString();t='d'; }
+            else if(type==='n') {v=Number(raw);t='n';if(!Number.isFinite(v)) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.035'));}
+            else throw new Error(globalThis.ExcelDiffI18n.t('file-codec.036',{p0:type}));
           }
           const inherited=sheet.rowStyles.get(r)||[...sheet.colStyles].reverse().find(x=>pos.c>=x.min&&pos.c<=x.max)?.style||styles[0];
           const style=a(n,'s') ? styles[+a(n,'s')] : inherited;
-          if(!style) throw new Error('セル書式の参照が不正です。');
+          if(!style) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.037'));
           const cell={v,t,f:fn?text(fn):null,style,rich,formulaMeta:'',cached:!!vn};
           if(fn) {
             const ft=a(fn,'t');
             if(ft==='shared') { const id=a(fn,'si'); if(text(fn)) sharedFormula.set(id,{r,c:pos.c,f:text(fn)}); else pending.push({r,c:pos.c,id,cell}); }
             else if(ft==='array') cell.formulaMeta=JSON.stringify({type:'array',ref:a(fn,'ref')});
             else if(ft==='dataTable') cell.formulaMeta=canonical(fn);
-            else if(ft && ft!=='normal') throw new Error(`未対応の数式型: ${ft}`);
+            else if(ft && ft!=='normal') throw new Error(globalThis.ExcelDiffI18n.t('file-codec.038',{p0:ft}));
             if(!vn) noCache++;
           }
           putCell(sheet,r,pos.c,cell);
         }
       }
-      for(const item of pending) { const base=sharedFormula.get(item.id); if(!base) throw new Error('共有数式の参照元が見つかりません。'); sheet.rows.get(item.r).get(item.c).f=shiftFormula(base.f,item.r-base.r,item.c-base.c); }
+      for(const item of pending) { const base=sharedFormula.get(item.id); if(!base) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.039')); sheet.rows.get(item.r).get(item.c).f=shiftFormula(base.f,item.r-base.r,item.c-base.c); }
       const colDims=cols.map(n=>{const out={};for(const k of ['min','max','width','hidden','outlineLevel','collapsed']) if(a(n,k))out[k]=a(n,k);return out;}).filter(x=>x.width||x.hidden==='1'||x.outlineLevel||x.collapsed==='1');
       sheet.metadata={visibility:a(info,'state','visible'), merges:nodes(doc,'mergeCell').map(n=>a(n,'ref')).sort(), rowDimensions:rowDims, columnDimensions:colDims,
         rowStyles:[...sheet.rowStyles], columnStyles:sheet.colStyles, defaults:canonical(child(root,'sheetFormatPr'))};
-      if(nodes(doc,'conditionalFormatting').length) sheet.warnings.push(`${sheet.name}: 条件付き書式のルール・表示結果は比較対象外です。`);
-      if(nodes(doc,'drawing').length||nodes(doc,'legacyDrawing').length||nodes(doc,'tablePart').length) sheet.warnings.push(`${sheet.name}: 図形・画像・コメント・テーブルスタイルは比較対象外です。`);
-      if(nodes(doc,'hyperlink').length) sheet.warnings.push(`${sheet.name}: ハイパーリンクのリンク先は比較対象外です（セルの文字列は比較します）。`);
-      if(noCache) sheet.warnings.push(`${sheet.name}: ${noCache}セルの数式結果が未保存です。数式は比較しますが、再計算はしません。`);
+      if(nodes(doc,'conditionalFormatting').length) sheet.warnings.push(globalThis.ExcelDiffI18n.t('file-codec.040',{p0:sheet.name}));
+      if(nodes(doc,'drawing').length||nodes(doc,'legacyDrawing').length||nodes(doc,'tablePart').length) sheet.warnings.push(globalThis.ExcelDiffI18n.t('file-codec.041',{p0:sheet.name}));
+      if(nodes(doc,'hyperlink').length) sheet.warnings.push(globalThis.ExcelDiffI18n.t('file-codec.042',{p0:sheet.name}));
+      if(noCache) sheet.warnings.push(globalThis.ExcelDiffI18n.t('file-codec.043',{p0:sheet.name,p1:noCache}));
       sheets.push(sheet);
     }
-    if(!sheets.length) throw new Error('比較可能なワークシートがありません。');
+    if(!sheets.length) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.044'));
     return {name,kind:'xlsx',sheets,warnings,metadata:{date1904:a(child(workbook.documentElement,'workbookPr'),'date1904','0'),theme}};
   }
   function parseCsv(s, delimiter=',') {
@@ -176,12 +176,12 @@
     if(delimiter===',' && s.split(/\r?\n/,1)[0].includes('\t')&&!s.split(/\r?\n/,1)[0].includes(',')) delimiter='\t';
     for(let i=0;i<s.length;i++) {const ch=s[i];
       if(quoted) { if(ch==='"') {if(s[i+1]==='"'){cell+='"';i++;}else{quoted=false;closed=true;}} else cell+=ch; continue; }
-      if(ch==='"') {if(!atStart) throw new Error('CSVの引用符が不正です。');quoted=true;atStart=false;continue;}
+      if(ch==='"') {if(!atStart) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.045'));quoted=true;atStart=false;continue;}
       if(ch===delimiter) {row.push(cell);cell='';closed=false;atStart=true;continue;}
       if(ch==='\r'||ch==='\n') {if(ch==='\r'&&s[i+1]==='\n')i++;row.push(cell);rows.push(row);row=[];cell='';closed=false;atStart=true;continue;}
-      if(closed) throw new Error('CSVの閉じ引用符の後に不正な文字があります。');cell+=ch;atStart=false;
+      if(closed) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.046'));cell+=ch;atStart=false;
     }
-    if(quoted) throw new Error('CSVの引用符が閉じられていません。');
+    if(quoted) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.047'));
     if(row.length||cell!==''||!atStart) {row.push(cell);rows.push(row);}
     return rows;
   }
@@ -189,32 +189,32 @@
     const bytes=new Uint8Array(buffer); let s,encoding='UTF-8';
     if(bytes[0]===255&&bytes[1]===254){s=new TextDecoder('utf-16le',{fatal:true}).decode(bytes);encoding='UTF-16LE';}
     else if(bytes[0]===254&&bytes[1]===255){s=new TextDecoder('utf-16be',{fatal:true}).decode(bytes);encoding='UTF-16BE';}
-    else {try{s=new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch{s=new TextDecoder('shift_jis',{fatal:true}).decode(bytes);encoding='Shift_JIS（推定）';}}
-    if(s.includes('\u0000'))throw new Error('CSVにNULL文字が含まれています。文字コードをUTF-8にして保存してください。');
+    else {try{s=new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch{s=new TextDecoder('shift_jis',{fatal:true}).decode(bytes);encoding=globalThis.ExcelDiffI18n.t('file-codec.048');}}
+    if(s.includes('\u0000'))throw new Error(globalThis.ExcelDiffI18n.t('file-codec.049'));
     const sheet=makeSheet('Sheet1'),rows=parseCsv(s.replace(/^\uFEFF/,''));let count=0;
-    rows.forEach((row,i)=>row.forEach((v,c)=>{if(++count>LIMITS.cells)throw new Error('セル数が50万を超えます。');putCell(sheet,i+1,c,{v,t:'s',f:null,style:{},rich:'',formulaMeta:'',cached:true});}));
-    return {name,kind:'csv',encoding,sheets:[sheet],warnings:encoding.includes('推定')?[`${name}: 文字コードをShift_JISとして読み込みました。文字化けがないかご確認ください。`]:[],metadata:{}};
+    rows.forEach((row,i)=>row.forEach((v,c)=>{if(++count>LIMITS.cells)throw new Error(globalThis.ExcelDiffI18n.t('file-codec.050'));putCell(sheet,i+1,c,{v,t:'s',f:null,style:{},rich:'',formulaMeta:'',cached:true});}));
+    return {name,kind:'csv',encoding,sheets:[sheet],warnings:encoding.includes(globalThis.ExcelDiffI18n.t('file-codec.051'))?[globalThis.ExcelDiffI18n.t('file-codec.052',{p0:name})]:[],metadata:{}};
   }
   let legacyPromise;
   async function readLegacy(buffer,name) {
     // Optional compatibility path. XLSX and CSV never need this external dependency.
     if(!globalThis.XLSX) {
-      legacyPromise ||= new Promise((resolve,reject)=>{const s=document.createElement('script'); const fail=()=>{s.remove();reject(new Error('XLS互換ライブラリを読み込めません。ExcelでXLSXに保存し直して比較してください。'));}; const timer=setTimeout(fail,15000);s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';s.onload=()=>{clearTimeout(timer);resolve();};s.onerror=()=>{clearTimeout(timer);fail();};document.head.append(s);}).catch(e=>{legacyPromise=null;throw e;});
+      legacyPromise ||= new Promise((resolve,reject)=>{const s=document.createElement('script'); const fail=()=>{s.remove();reject(new Error(globalThis.ExcelDiffI18n.t('file-codec.053')));}; const timer=setTimeout(fail,15000);s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';s.onload=()=>{clearTimeout(timer);resolve();};s.onerror=()=>{clearTimeout(timer);fail();};document.head.append(s);}).catch(e=>{legacyPromise=null;throw e;});
       await legacyPromise;
     }
     const wb=globalThis.XLSX.read(buffer,{type:'array',cellFormula:true,cellNF:true,cellStyles:true,sheetStubs:true,raw:true,WTF:true});
     const sheets=wb.SheetNames.map(name=>{const sheet=makeSheet(name),ws=wb.Sheets[name];for(const [addr,c] of Object.entries(ws)){if(addr.startsWith('!'))continue;const pos=address(addr);putCell(sheet,pos.r,pos.c,{v:c.v??null,t:c.t==='z'?'blank':c.t||'blank',f:c.f??null,style:{numFmt:c.z||'General'},rich:'',formulaMeta:c.F||'',cached:c.v!==undefined});}return sheet;});
-    if(!sheets.length)throw new Error('比較可能なシートがありません。');
-    return {name,kind:'xls',sheets,warnings:[`${name}: XLSの書式比較は表示形式のみです。色・フォント・罫線の比較にはXLSXを使用してください。`],metadata:{}};
+    if(!sheets.length)throw new Error(globalThis.ExcelDiffI18n.t('file-codec.054'));
+    return {name,kind:'xls',sheets,warnings:[globalThis.ExcelDiffI18n.t('file-codec.055',{p0:name})],metadata:{}};
   }
   async function read(file) {
-    if(file.size>LIMITS.file)throw new Error(`${file.name}: 1ファイル50MBまでです。`);
-    if(file.size===0)throw new Error(`${file.name}: ファイルが空です。`);
+    if(file.size>LIMITS.file)throw new Error(globalThis.ExcelDiffI18n.t('file-codec.056',{p0:file.name}));
+    if(file.size===0)throw new Error(globalThis.ExcelDiffI18n.t('file-codec.057',{p0:file.name}));
     const buffer=await file.arrayBuffer(),name=file.name;let book;
     if(/\.xlsx$/i.test(name))book=await readXlsx(buffer,name);
     else if(/\.csv$/i.test(name))book=readCsv(buffer,name);
     else if(/\.xls$/i.test(name))book=await readLegacy(buffer,name);
-    else throw new Error('対応形式はXLSX / CSV / XLSです。');
+    else throw new Error(globalThis.ExcelDiffI18n.t('file-codec.058'));
     book.bytes=new Uint8Array(buffer); return book;
   }
   // Write uncompressed ZIP so the report is independent of third-party libraries.
@@ -234,7 +234,7 @@
     files['xl/workbook.xml']=`<workbook xmlns="${NS}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${xmlEscape(s.name)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets></workbook>`;
     files['xl/_rels/workbook.xml.rels']=`<Relationships xmlns="${relNS}">${sheets.map((_,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="styles" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
     files['xl/styles.xml']=`<styleSheet xmlns="${NS}"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF177742"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
-    sheets.forEach((sheet,i)=>{ for(const row of sheet.rows) for(const v of row) if(String(v??'').length>32767) throw new Error('レポートの1セルが32767文字を超えます。HTMLレポートをご利用ください。'); const width=Math.max(1,...sheet.rows.map(r=>r.length));files[`xl/worksheets/sheet${i+1}.xml`]=`<worksheet xmlns="${NS}"><dimension ref="A1:${colName(width-1)}${Math.max(1,sheet.rows.length)}"/><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${Array.from({length:width},(_,c)=>`<col min="${c+1}" max="${c+1}" width="${c<3?22:36}" customWidth="1"/>`).join('')}</cols><sheetData>${sheet.rows.map((row,r)=>`<row r="${r+1}"${r===0?' ht="30" customHeight="1"':''}>${row.map((v,c)=>{const ref=colName(c)+(r+1);return typeof v==='number'&&Number.isFinite(v)?`<c r="${ref}" s="${r===0?1:0}"><v>${v}</v></c>`:`<c r="${ref}" s="${r===0?1:0}" t="inlineStr"><is><t xml:space="preserve">${xmlEscape(v)}</t></is></c>`;}).join('')}</row>`).join('')}</sheetData></worksheet>`;});
+    sheets.forEach((sheet,i)=>{ for(const row of sheet.rows) for(const v of row) if(String(v??'').length>32767) throw new Error(globalThis.ExcelDiffI18n.t('file-codec.059')); const width=Math.max(1,...sheet.rows.map(r=>r.length));files[`xl/worksheets/sheet${i+1}.xml`]=`<worksheet xmlns="${NS}"><dimension ref="A1:${colName(width-1)}${Math.max(1,sheet.rows.length)}"/><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${Array.from({length:width},(_,c)=>`<col min="${c+1}" max="${c+1}" width="${c<3?22:36}" customWidth="1"/>`).join('')}</cols><sheetData>${sheet.rows.map((row,r)=>`<row r="${r+1}"${r===0?' ht="30" customHeight="1"':''}>${row.map((v,c)=>{const ref=colName(c)+(r+1);return typeof v==='number'&&Number.isFinite(v)?`<c r="${ref}" s="${r===0?1:0}"><v>${v}</v></c>`:`<c r="${ref}" s="${r===0?1:0}" t="inlineStr"><is><t xml:space="preserve">${xmlEscape(v)}</t></is></c>`;}).join('')}</row>`).join('')}</sheetData></worksheet>`;});
     return zipStore(files);
   }
   globalThis.ExcelDiffCodec={read,readXlsx,readCsv,parseCsv,writeReport,colName,colIndex,address,shiftFormula,crc32,canonical,LIMITS};
