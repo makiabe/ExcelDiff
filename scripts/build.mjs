@@ -42,7 +42,8 @@ for(const locale of config.locales){
   'raw.languageSwitcher':`<div class="locale-switcher" role="group" aria-label="${escape(messages['nav.language'])}">${config.locales.map(l=>`<a href="${base}${l.path||'./'}" lang="${l.code}" hreflang="${l.code}"${l.code===locale.code?' aria-current="page"':''}>${escape(l.label)}</a>`).join('')}</div>`,
   'raw.heroBubble':intl?`<p class="bubble">${escape(messages['mascot.heroBubble'])}</p>`:'',
   'raw.bottomBubble':intl?`<p class="bubble">${escape(messages['mascot.bottomBubble'])}</p>`:'',
-  'raw.heroLabels':intl?`<ul class="hero-labels" aria-label="${escape(messages['mascot.heroLabelsLabel'])}"><li>${escape(messages['mascot.heroLabelCells'])}</li><li>${escape(messages['mascot.heroLabelRows'])}</li><li>${escape(messages['mascot.heroLabelFormulas'])}</li></ul>`:''
+  'raw.heroCaptions':intl?`<p class="image-caption hero-caption-top">${escape(messages['mascot.heroCaptionTop'])}</p><p class="image-caption hero-caption-bottom">${escape(messages['mascot.heroCaptionBottom'])}</p>`:'',
+  'raw.bottomCaption':intl?`<p class="image-caption bottom-image-caption">${escape(messages['mascot.bottomCaption'])}</p>`:''
  };
  const html=template.replace(/\{\{([A-Za-z0-9_.-]+)\}\}/g,(_,key)=>{
   if(!Object.hasOwn(vars,key))throw Error(`Unknown template key ${key}`);

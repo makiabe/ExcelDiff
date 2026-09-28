@@ -301,11 +301,10 @@
   "mascot.heroAlt": "カエルの帽子をかぶった猫とExcelファイル",
   "mascot.bottomAlt": "カエルの帽子をかぶった猫",
   "mascot.heroBubble": "違いを一緒に\n見つけよう！",
-  "mascot.bottomBubble": "ファイルは\nあなたの端末の中に。",
+  "mascot.bottomBubble": "無料でずっと\n使えるよ！",
   "form.excludeLabel": "比較対象外の列",
   "form.keyLabel": "主キー（行の一致判定に使用）",
-  "mascot.heroLabelsLabel": "Excel Diffで見つけられる違い",
-  "mascot.heroLabelCells": "セルの変更",
-  "mascot.heroLabelRows": "行の追加・削除",
-  "mascot.heroLabelFormulas": "数式・書式の違い"
+  "mascot.heroCaptionTop": "2つのファイルを\nドロップするだけ！",
+  "mascot.heroCaptionBottom": "見えなかった違いも\nスッキリ！",
+  "mascot.bottomCaption": "お仕事の\n味方にゃ！"
 }

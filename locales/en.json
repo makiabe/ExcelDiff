@@ -301,11 +301,10 @@
   "mascot.heroAlt": "A cat in a frog hat comparing two Excel files",
   "mascot.bottomAlt": "A winking cat in a frog hat",
   "mascot.heroBubble": "Let’s spot\nthe differences!",
-  "mascot.bottomBubble": "Your files stay\nwith you.",
+  "mascot.bottomBubble": "Free to use\nforever!",
   "form.excludeLabel": "Columns to exclude",
   "form.keyLabel": "Primary key for matching rows",
-  "mascot.heroLabelsLabel": "What Excel Diff can spot",
-  "mascot.heroLabelCells": "Cell changes",
-  "mascot.heroLabelRows": "Added & deleted rows",
-  "mascot.heroLabelFormulas": "Formula & format differences"
+  "mascot.heroCaptionTop": "Just drop\ntwo files!",
+  "mascot.heroCaptionBottom": "Spot hidden\ndifferences!",
+  "mascot.bottomCaption": "Your work\nbuddy!"
 }

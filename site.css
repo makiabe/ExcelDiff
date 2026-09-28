@@ -6,11 +6,8 @@ html:not([lang=ja]) .hero-section{display:grid!important;grid-template-columns:m
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*{transition:none!important}}
 @media print{.locale-switcher,.mascot{display:none!important}}
 
-/* Text callouts for international artwork; Japanese artwork already contains its own labels. */
-html:not([lang=ja]) .hero-mascot{padding-bottom:44px}
-.hero-mascot .hero-labels{position:absolute;right:2%;bottom:3px;left:2%;display:flex;justify-content:center;gap:8px;width:auto;margin:0;padding:0;list-style:none;pointer-events:none}
-.hero-mascot .hero-labels li{display:flex;flex:1 1 0;align-items:center;justify-content:center;min-height:34px;padding:6px 8px;border:1px solid rgba(21,147,90,.2);border-radius:999px;background:rgba(255,255,255,.96);box-shadow:0 3px 12px rgba(30,80,50,.09);color:#176f45;font-size:clamp(9px,1.8cqw,13px);font-weight:800;line-height:1.25;text-align:center}
-.hero-mascot .hero-labels li::before{content:"";width:7px;height:7px;flex:none;margin-right:7px;border-radius:50%;background:#15935a}
-.hero-mascot .hero-labels li:nth-child(2)::before{background:#5a6ee0}
-.hero-mascot .hero-labels li:nth-child(3)::before{background:#e5a641}
-@media(max-width:760px){html:not([lang=ja]) .hero-mascot{padding-bottom:42px}.hero-mascot .hero-labels{right:0;left:0;gap:5px}.hero-mascot .hero-labels li{min-height:34px;padding:5px;font-size:clamp(8px,2.1cqw,12px)}}
+/* CSS-rendered translations over the blank international mascot artwork. */
+html:not([lang=ja]) .image-caption{position:absolute;margin:0;text-align:center;white-space:pre-line;font-weight:900;line-height:1.16;pointer-events:auto;user-select:text;-webkit-text-stroke:3px #fff;paint-order:stroke fill;text-shadow:0 1px 3px rgba(255,255,255,.9)}
+html:not([lang=ja]) .hero-mascot .hero-caption-top{right:2%;top:13%;width:31%;color:#087b3c;font-size:clamp(10px,2.5cqw,17px)}
+html:not([lang=ja]) .hero-mascot .hero-caption-bottom{right:3%;bottom:1%;width:32%;color:#2579bd;font-size:clamp(9px,2.3cqw,16px)}
+html:not([lang=ja]) .bottom-mascot .bottom-image-caption{left:75%;top:29%;width:23%;height:52%;display:flex;align-items:center;justify-content:center;color:#087b3c;font-size:clamp(9px,2.5cqw,16px)}
