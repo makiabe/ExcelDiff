@@ -1,6 +1,6 @@
 {
   "siteUrl": "https://makiabe.github.io/ExcelDiff/",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "fallbackLocale": "en",
   "locales": [
     {"code": "ja", "label": "日本語", "path": "", "dir": "ltr", "artwork": "ja"},

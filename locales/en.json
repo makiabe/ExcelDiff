@@ -303,5 +303,9 @@
   "mascot.heroBubble": "Let’s spot\nthe differences!",
   "mascot.bottomBubble": "Your files stay\nwith you.",
   "form.excludeLabel": "Columns to exclude",
-  "form.keyLabel": "Primary key for matching rows"
+  "form.keyLabel": "Primary key for matching rows",
+  "mascot.heroLabelsLabel": "What Excel Diff can spot",
+  "mascot.heroLabelCells": "Cell changes",
+  "mascot.heroLabelRows": "Added & deleted rows",
+  "mascot.heroLabelFormulas": "Formula & format differences"
 }

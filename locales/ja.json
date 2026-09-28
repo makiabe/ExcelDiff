@@ -303,5 +303,9 @@
   "mascot.heroBubble": "違いを一緒に\n見つけよう！",
   "mascot.bottomBubble": "ファイルは\nあなたの端末の中に。",
   "form.excludeLabel": "比較対象外の列",
-  "form.keyLabel": "主キー（行の一致判定に使用）"
+  "form.keyLabel": "主キー（行の一致判定に使用）",
+  "mascot.heroLabelsLabel": "Excel Diffで見つけられる違い",
+  "mascot.heroLabelCells": "セルの変更",
+  "mascot.heroLabelRows": "行の追加・削除",
+  "mascot.heroLabelFormulas": "数式・書式の違い"
 }
