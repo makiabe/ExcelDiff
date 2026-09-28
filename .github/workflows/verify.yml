@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -16,13 +19,9 @@ jobs:
           node-version: '22'
       - name: Validate generated localized pages
         run: |
-          if [ -f .publication/migrate.mjs ]; then
-            echo 'The Prepare English release workflow will build and validate this one-time migration.'
-          else
-            npm run build
-            npm run check
-            git diff --exit-code -- index.html en locales sitemap.xml .nojekyll
-          fi
+          npm run build
+          npm run check
+          git diff --exit-code -- index.html en locales sitemap.xml .nojekyll
       - uses: actions/upload-artifact@v4
         with:
           name: excel-diff-site
@@ -30,6 +29,56 @@ jobs:
             .
             !.git
             !node_modules
-            !.publication
+            !test-results
           include-hidden-files: true
+          retention-days: 7
+  public-site:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium
+      - name: Wait for GitHub Pages to serve this release
+        shell: python
+        run: |
+          import hashlib, time, urllib.request
+          from pathlib import Path
+          base = 'https://makiabe.github.io/ExcelDiff/'
+          expected = {p: hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in ['index.html', 'en/index.html', 'sitemap.xml']}
+          for attempt in range(60):
+              ready = True
+              for path, checksum in expected.items():
+                  try:
+                      request = urllib.request.Request(base + path, headers={'Cache-Control': 'no-cache'})
+                      with urllib.request.urlopen(request, timeout=15) as response:
+                          actual = hashlib.sha256(response.read()).hexdigest()
+                      if actual != checksum:
+                          ready = False
+                          break
+                  except Exception as error:
+                      print(type(error).__name__, str(error))
+                      ready = False
+                      break
+              if ready:
+                  print('Japanese, English and sitemap URLs all match the committed release.')
+                  break
+              print(f'Waiting for Pages deployment ({attempt + 1}/60)…')
+              time.sleep(5)
+          else:
+              raise RuntimeError('GitHub Pages has not served this release within the waiting period.')
+      - name: Test the public Japanese and English URLs
+        run: python tests/browser.py https://makiabe.github.io/ExcelDiff/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-site-validation
+          path: test-results/
           retention-days: 7
